@@ -10,41 +10,8 @@ public_users.get('/',function (req, res) {
   res.send(JSON.stringify({books},null,4));
 });
 
-// Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  const isbn = req.params.isbn;
-  res.send(books[isbn])
-  //return res.status(300).json({message: "Yet1 to be implemented"});
- });
-  
-// Get book details based on author
-public_users.get('/author/:author', function (req, res) {
-    let booksbyauthor = [];
-    let isbns = Object.keys(books);
-    isbns.forEach((isbn) => {
-      if(books[isbn]["author"] === req.params.author) {
-        booksbyauthor.push({"isbn":isbn,
-                            "title":books[isbn]["title"],
-                            "reviews":books[isbn]["reviews"]});
-      }
-    });
-    res.send(JSON.stringify({booksbyauthor}, null, 4));
-  });
+ 
 
-// Get all books based on title
-public_users.get('/title/:title',function (req, res) {
-    let booksbytitle = [];
-    let isbns = Object.keys(books);
-    isbns.forEach((isbn) => {
-      if(books[isbn]["title"] === req.params.title) {
-        booksbytitle.push({"isbn":isbn,
-                            "author":books[isbn]["author"],
-                            "reviews":books[isbn]["reviews"]});
-      }
-    });
-    res.send(JSON.stringify({booksbytitle}, null, 4));
-  });
 
   public_users.post("/register", function (req,res) {
     const username = req.body.username;
@@ -67,4 +34,102 @@ public_users.get('/review/:isbn',function (req, res) {
     res.send(books[isbn]["reviews"])
 });
 
+// TASK 10 - Get the book list available in the shop using promises
+public_users.get('/async-get-books',function (req, res) {
+
+    const get_books = new Promise((resolve, reject) => {
+        resolve(res.send(JSON.stringify({books}, null, 4)));
+      });
+
+      get_books.then(() => console.log("Promise for Task 10 resolved"));
+
+  });
+
+  // Get book details based on ISBN
+    public_users.get('/isbn/:isbn',function (req, res) {
+    //Write your code here
+    const isbn = req.params.isbn;
+    res.send(books[isbn])
+    //return res.status(300).json({message: "Yet1 to be implemented"});
+   });
+
+// TASK 11 - Get the book details based on ISBN available in the shop using promises
+  public_users.get('/async-get-isbn/:isbn',function (req, res) {
+
+    const get_isbn = new Promise((resolve, reject) => {
+        const isbn = req.params.isbn;
+        //resolve(res.send(JSON.stringify(books[isbn], null, 4)));
+        resolve(res.send(books[isbn]));
+      });
+
+      get_isbn.then(() => console.log("Promise for Task 11 resolved"));
+
+  });
+
+  // Get book details based on author
+public_users.get('/author/:author', function (req, res) {
+    let booksbyauthor = [];
+    let isbns = Object.keys(books);
+    isbns.forEach((isbn) => {
+      if(books[isbn]["author"] === req.params.author) {
+        booksbyauthor.push({"isbn":isbn,
+                            "title":books[isbn]["title"],
+                            "reviews":books[isbn]["reviews"]});
+      }
+    });
+    res.send(JSON.stringify({booksbyauthor}, null, 4));
+  });
+ // TASK 12 - Get the book details based on AUTHOR available in the shop using promises
+ public_users.get('/async-get-author/:author',function (req, res) {
+
+    const get_author = new Promise((resolve, reject) => {
+        let booksbyauthor = [];
+        let isbns = Object.keys(books);
+        isbns.forEach((isbn) => {
+          if(books[isbn]["author"] === req.params.author) {
+            booksbyauthor.push({"isbn":isbn,
+                                "title":books[isbn]["title"],
+                                "reviews":books[isbn]["reviews"]});
+          }
+        });
+        resolve(res.send({booksbyauthor}));
+      });
+
+      get_author.then(() => console.log("Promise for Task 12 resolved"));
+
+  });
+
+  // Get all books based on title
+public_users.get('/title/:title',function (req, res) {
+    let booksbytitle = [];
+    let isbns = Object.keys(books);
+    isbns.forEach((isbn) => {
+      if(books[isbn]["title"] === req.params.title) {
+        booksbytitle.push({"isbn":isbn,
+                            "author":books[isbn]["author"],
+                            "reviews":books[isbn]["reviews"]});
+      }
+    });
+    res.send(JSON.stringify({booksbytitle}, null, 4));
+  });
+
+   // TASK 13 - Get the book details based on TITLE available in the shop using promises
+ public_users.get('/async-get-title/:title',function (req, res) {
+
+    const get_title = new Promise((resolve, reject) => {
+        let booksbytitle = [];
+        let isbns = Object.keys(books);
+        isbns.forEach((isbn) => {
+          if(books[isbn]["title"] === req.params.title) {
+            booksbytitle.push({"isbn":isbn,
+                                "author":books[isbn]["author"],
+                                "reviews":books[isbn]["reviews"]});
+          }
+        });
+        resolve(res.send({booksbytitle}));
+      });
+
+      get_title.then(() => console.log("Promise for Task 13 resolved"));
+
+  });
 module.exports.general = public_users;
